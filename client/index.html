@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #user-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .user {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Manager</h1>
+    <ul id="user-list"></ul>
+
+    <button id="create-user">Créer un utilisateur</button>
+    <button id="delete-user">Supprimer un utilisateur</button>
+    <button id="update-user">Modifier un utilisateur</button>
+
+    <script>
+
+        fetch('http://localhost:8000/users')
+        .then(response => response.json())
+        .then(data => {
+            const userList = document.getElementById('user-list');
+            const users = data.data;
+            users.forEach(user => {
+                const li = document.createElement('li');
+                li.textContent = `${user.firstName} ${user.lastName} (${user.username})`; 
+                li.className = 'user';
+                userList.appendChild(li);
+            });
+        });
+      
+        document.getElementById('create-user').addEventListener('click', () => {
+            fetch('http://localhost:8000/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+              
+                }),
+            })
+            .then(response => response.text())
+            .then(data => console.log(data));
+        });
+
+        document.getElementById('delete-user').addEventListener('click', () => {
+            fetch('http://localhost:8000/users/{userId}', {
+                method: 'DELETE',
+            })
+            .then(response => response.text())
+            .then(data => console.log(data));
+        });
+
+        document.getElementById('update-user').addEventListener('click', () => {
+            const userId = document.getElementById('update-user-id').value; 
+            fetch(`http://localhost:8000/users/${userId}`, { 
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    firstName: 'John',
+                    lastName: 'Doe',
+                    username: 'johndoe',
+                }),
+            })
+            .then(response => response.text())
+            .then(data => console.log(data));
+        });
+    </script>
+</body>
+</html>
