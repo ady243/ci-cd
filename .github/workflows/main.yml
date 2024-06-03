@@ -26,6 +26,11 @@ jobs:
     - name: Run tests
       run: ./vendor/bin/phpunit --working-dir=my-ci-cd
 
+    - name: Build and run Docker container
+      run: |
+        docker build -t my-slim-app .
+        docker run -d --name my-slim-container -p 8080:8080 my-slim-app
+
     - name: Deploy to GitHub Pages
       if: github.ref == 'refs/heads/main'
       uses: peaceiris/actions-gh-pages@v3
