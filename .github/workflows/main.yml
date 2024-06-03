@@ -21,7 +21,7 @@ jobs:
       run: composer validate --working-dir=my-ci-cd
 
     - name: Install dependencies
-      run: composer install --prefer-dist --no-progress --no-suggest --working-dir=my-ci-cd
+      run: composer install --prefer-dist --no-progress --working-dir=my-ci-cd
 
     - name: Run tests
       run: ./vendor/bin/phpunit --working-dir=my-ci-cd
